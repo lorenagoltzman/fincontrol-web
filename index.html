@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Aplicacao web para controle financeiro pessoal.">
+  <title>FinControl</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23176b87'/%3E%3Cpath d='M20 16h28v8H29v9h15v8H29v15h-9z' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#dashboard" aria-label="FinControl - início">
+        <span class="brand-mark">F</span>
+        <span>FinControl</span>
+      </a>
+      <nav aria-label="Navegação principal">
+        <a class="nav-link active" href="#dashboard"><span>Visão geral</span></a>
+        <a class="nav-link" href="#transactions"><span>Lançamentos</span></a>
+        <a class="nav-link" href="#planning"><span>Planejamento</span></a>
+      </nav>
+      <div class="side-note">
+        <span class="label">Armazenamento</span>
+        <strong>Local e privado</strong>
+        <p>Os dados deste protótipo ficam somente neste navegador.</p>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar" id="dashboard">
+        <div>
+          <span class="eyebrow">Setembro de 2026</span>
+          <h1>Minha vida financeira</h1>
+          <p>Acompanhe suas movimentações e mantenha o mês sob controle.</p>
+        </div>
+        <button class="button primary" id="open-transaction" type="button">+ Novo lançamento</button>
+      </header>
+
+      <section class="metrics" aria-label="Resumo financeiro">
+        <article class="metric balance">
+          <span>Saldo atual</span>
+          <strong id="balance-value">R$ 0,00</strong>
+          <small id="balance-hint">Resultado das movimentações</small>
+        </article>
+        <article class="metric">
+          <span>Entradas</span>
+          <strong id="income-value">R$ 0,00</strong>
+          <small>Receitas cadastradas</small>
+        </article>
+        <article class="metric">
+          <span>Saídas</span>
+          <strong id="expense-value">R$ 0,00</strong>
+          <small>Despesas cadastradas</small>
+        </article>
+      </section>
+
+      <section class="dashboard-grid">
+        <article class="panel category-panel">
+          <div class="panel-heading">
+            <div><span class="eyebrow">Análise</span><h2>Gastos por categoria</h2></div>
+            <span class="period-chip">Este mês</span>
+          </div>
+          <div id="category-bars" class="category-bars"></div>
+        </article>
+
+        <article class="panel goal-panel" id="planning">
+          <div class="panel-heading">
+            <div><span class="eyebrow">Planejamento</span><h2>Meta de economia</h2></div>
+          </div>
+          <div class="goal-ring" id="goal-ring" role="img" aria-label="Progresso da meta de economia">
+            <div><strong id="goal-percent">0%</strong><span>da meta</span></div>
+          </div>
+          <div class="goal-values">
+            <span>Economizado <strong id="saved-value">R$ 0,00</strong></span>
+            <span>Meta <strong id="goal-value">R$ 300,00</strong></span>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel transactions" id="transactions">
+        <div class="panel-heading transactions-heading">
+          <div><span class="eyebrow">Histórico</span><h2>Lançamentos</h2></div>
+          <div class="filters">
+            <label>
+              <span class="sr-only">Buscar lançamento</span>
+              <input id="search" type="search" placeholder="Buscar descrição ou categoria">
+            </label>
+            <label>
+              <span class="sr-only">Filtrar por tipo</span>
+              <select id="type-filter">
+                <option value="all">Todos</option>
+                <option value="income">Entradas</option>
+                <option value="expense">Saídas</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Descrição</th><th>Categoria</th><th>Data</th><th>Tipo</th><th class="amount">Valor</th><th><span class="sr-only">Ações</span></th></tr></thead>
+            <tbody id="transaction-list"></tbody>
+          </table>
+          <div id="empty-state" class="empty-state" hidden>Nenhum lançamento encontrado.</div>
+        </div>
+        <div class="table-footer"><button id="restore-demo" type="button" class="text-button">Restaurar dados de demonstração</button></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="transaction-dialog">
+    <form id="transaction-form" method="dialog">
+      <div class="dialog-heading"><div><span class="eyebrow">Cadastro</span><h2>Novo lançamento</h2></div><button id="close-dialog" class="icon-button" type="button" aria-label="Fechar">×</button></div>
+      <div class="form-grid">
+        <label class="full">Descrição<input id="description" name="description" required maxlength="60" placeholder="Ex.: Compra no supermercado"></label>
+        <label>Valor<input id="value" name="value" required min="0.01" step="0.01" type="number" placeholder="0,00"></label>
+        <label>Data<input id="date" name="date" required type="date"></label>
+        <label>Tipo<select id="type" name="type"><option value="expense">Saída</option><option value="income">Entrada</option></select></label>
+        <label>Categoria<select id="category" name="category"><option>Alimentação</option><option>Transporte</option><option>Educação</option><option>Saúde</option><option>Moradia</option><option>Lazer</option><option>Trabalho</option><option>Outros</option></select></label>
+      </div>
+      <p id="form-error" class="form-error" role="alert"></p>
+      <div class="dialog-actions"><button id="cancel-dialog" class="button secondary" type="button">Cancelar</button><button class="button primary" type="submit">Salvar lançamento</button></div>
+    </form>
+  </dialog>
+
+  <script src="src/finance.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
