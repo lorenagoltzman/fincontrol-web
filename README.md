@@ -4,6 +4,12 @@ Aplicação web responsiva para registrar receitas e despesas, acompanhar o sald
 
 > Projeto de portfólio desenvolvido para aplicar JavaScript, regras de negócio, persistência local e modelagem de banco de dados.
 
+## Demonstração
+
+**[Abrir aplicação publicada](https://lorenagoltzman.github.io/fincontrol-web/)**
+
+Use dados fictícios: as informações ficam somente no `localStorage` do navegador.
+
 ## Funcionalidades
 
 - Cadastro de receitas e despesas
